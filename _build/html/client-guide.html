@@ -1,0 +1,329 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Building MCP Clients &mdash; MCP Python SDK 1.6.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=d8a309f0" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=72d88caf"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="MCP Examples" href="examples.html" />
+    <link rel="prev" title="Building MCP Servers" href="server-guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MCP Python SDK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction to Model Context Protocol (MCP)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started with MCP Python SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server-guide.html">Building MCP Servers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Building MCP Clients</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#client-session">Client Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connection-methods">Connection Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#working-with-prompts">Working with Prompts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#working-with-resources">Working with Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#working-with-tools">Working with Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#message-creation">Message Creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#integration-with-llms">Integration with LLMs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">MCP Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced-topics.html">Advanced MCP Topics</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MCP Python SDK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Building MCP Clients</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/client-guide.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="building-mcp-clients">
+<h1>Building MCP Clients<a class="headerlink" href="#building-mcp-clients" title="Link to this heading"></a></h1>
+<p>This guide covers how to build MCP clients using the Python SDK. Clients can connect to MCP servers, discover capabilities, and interact with resources, tools, and prompts.</p>
+<section id="client-session">
+<h2>Client Session<a class="headerlink" href="#client-session" title="Link to this heading"></a></h2>
+<p>The SDK provides a high-level client interface for connecting to MCP servers. The main entry point is the <code class="docutils literal notranslate"><span class="pre">ClientSession</span></code> class:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mcp</span> <span class="kn">import</span> <span class="n">ClientSession</span><span class="p">,</span> <span class="n">StdioServerParameters</span><span class="p">,</span> <span class="n">types</span>
+<span class="kn">from</span> <span class="nn">mcp.client.stdio</span> <span class="kn">import</span> <span class="n">stdio_client</span>
+
+<span class="c1"># Create server parameters for stdio connection</span>
+<span class="n">server_params</span> <span class="o">=</span> <span class="n">StdioServerParameters</span><span class="p">(</span>
+    <span class="n">command</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">,</span>  <span class="c1"># Executable</span>
+    <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;example_server.py&quot;</span><span class="p">],</span>  <span class="c1"># Optional command line arguments</span>
+    <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># Optional environment variables</span>
+<span class="p">)</span>
+
+<span class="c1"># Optional: create a sampling callback</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">handle_sampling_message</span><span class="p">(</span>
+    <span class="n">message</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">CreateMessageRequestParams</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">types</span><span class="o">.</span><span class="n">CreateMessageResult</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">types</span><span class="o">.</span><span class="n">CreateMessageResult</span><span class="p">(</span>
+        <span class="n">role</span><span class="o">=</span><span class="s2">&quot;assistant&quot;</span><span class="p">,</span>
+        <span class="n">content</span><span class="o">=</span><span class="n">types</span><span class="o">.</span><span class="n">TextContent</span><span class="p">(</span>
+            <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
+            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello, world! from model&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">,</span>
+        <span class="n">stopReason</span><span class="o">=</span><span class="s2">&quot;endTurn&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">():</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">stdio_client</span><span class="p">(</span><span class="n">server_params</span><span class="p">)</span> <span class="k">as</span> <span class="p">(</span><span class="n">read</span><span class="p">,</span> <span class="n">write</span><span class="p">):</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">ClientSession</span><span class="p">(</span>
+            <span class="n">read</span><span class="p">,</span> <span class="n">write</span><span class="p">,</span> <span class="n">sampling_callback</span><span class="o">=</span><span class="n">handle_sampling_message</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+            <span class="c1"># Initialize the connection</span>
+            <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+
+            <span class="c1"># Use session methods...</span>
+</pre></div>
+</div>
+</section>
+<section id="connection-methods">
+<h2>Connection Methods<a class="headerlink" href="#connection-methods" title="Link to this heading"></a></h2>
+<p>There are different ways to connect to MCP servers:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mcp</span> <span class="kn">import</span> <span class="n">StdioServerParameters</span><span class="p">,</span> <span class="n">SocketServerParameters</span>
+<span class="kn">from</span> <span class="nn">mcp.client.stdio</span> <span class="kn">import</span> <span class="n">stdio_client</span>
+<span class="kn">from</span> <span class="nn">mcp.client.socket</span> <span class="kn">import</span> <span class="n">socket_client</span>
+
+<span class="c1"># Connect to a server over stdio</span>
+<span class="n">server_params</span> <span class="o">=</span> <span class="n">StdioServerParameters</span><span class="p">(</span>
+    <span class="n">command</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">,</span>         <span class="c1"># Command to run</span>
+    <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;server.py&quot;</span><span class="p">],</span>       <span class="c1"># Command arguments</span>
+    <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>                 <span class="c1"># Optional environment variables</span>
+<span class="p">)</span>
+
+<span class="k">async</span> <span class="k">with</span> <span class="n">stdio_client</span><span class="p">(</span><span class="n">server_params</span><span class="p">)</span> <span class="k">as</span> <span class="p">(</span><span class="n">read</span><span class="p">,</span> <span class="n">write</span><span class="p">):</span>
+    <span class="c1"># Use read and write streams...</span>
+
+<span class="c1"># Connect to a server over WebSocket</span>
+<span class="n">server_params</span> <span class="o">=</span> <span class="n">SocketServerParameters</span><span class="p">(</span>
+    <span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span>         <span class="c1"># Server host</span>
+    <span class="n">port</span><span class="o">=</span><span class="mi">8000</span><span class="p">,</span>                <span class="c1"># Server port</span>
+    <span class="n">ssl</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>                <span class="c1"># SSL/TLS</span>
+<span class="p">)</span>
+
+<span class="k">async</span> <span class="k">with</span> <span class="n">socket_client</span><span class="p">(</span><span class="n">server_params</span><span class="p">)</span> <span class="k">as</span> <span class="p">(</span><span class="n">read</span><span class="p">,</span> <span class="n">write</span><span class="p">):</span>
+    <span class="c1"># Use read and write streams...</span>
+</pre></div>
+</div>
+</section>
+<section id="working-with-prompts">
+<h2>Working with Prompts<a class="headerlink" href="#working-with-prompts" title="Link to this heading"></a></h2>
+<p>Discover and use prompts from the server:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># List available prompts</span>
+<span class="n">prompts</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">list_prompts</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Available prompts: </span><span class="si">{</span><span class="n">prompts</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Get a prompt</span>
+<span class="n">prompt</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">get_prompt</span><span class="p">(</span>
+    <span class="s2">&quot;example-prompt&quot;</span><span class="p">,</span> <span class="n">arguments</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;arg1&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Prompt: </span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="working-with-resources">
+<h2>Working with Resources<a class="headerlink" href="#working-with-resources" title="Link to this heading"></a></h2>
+<p>Discover and read resources from the server:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># List available resources</span>
+<span class="n">resources</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">list_resources</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Available resources: </span><span class="si">{</span><span class="n">resources</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Read a resource</span>
+<span class="n">content</span><span class="p">,</span> <span class="n">mime_type</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">read_resource</span><span class="p">(</span><span class="s2">&quot;file://some/path&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Resource content (</span><span class="si">{</span><span class="n">mime_type</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">content</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Subscribe to resource list changes</span>
+<span class="k">async</span> <span class="k">for</span> <span class="n">resources</span> <span class="ow">in</span> <span class="n">session</span><span class="o">.</span><span class="n">subscribe_resources</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Resources updated: </span><span class="si">{</span><span class="n">resources</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="working-with-tools">
+<h2>Working with Tools<a class="headerlink" href="#working-with-tools" title="Link to this heading"></a></h2>
+<p>Discover and call tools on the server:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># List available tools</span>
+<span class="n">tools</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">list_tools</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Available tools: </span><span class="si">{</span><span class="n">tools</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Call a tool</span>
+<span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">call_tool</span><span class="p">(</span>
+    <span class="s2">&quot;tool-name&quot;</span><span class="p">,</span>
+    <span class="n">arguments</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;arg1&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tool result: </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="message-creation">
+<h2>Message Creation<a class="headerlink" href="#message-creation" title="Link to this heading"></a></h2>
+<p>MCP clients can handle message creation for AI models:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mcp</span> <span class="kn">import</span> <span class="n">types</span>
+
+<span class="c1"># Define a sampling callback</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">handle_sampling_message</span><span class="p">(</span>
+    <span class="n">message</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">CreateMessageRequestParams</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">types</span><span class="o">.</span><span class="n">CreateMessageResult</span><span class="p">:</span>
+    <span class="c1"># This is where you would call your LLM API</span>
+    <span class="k">return</span> <span class="n">types</span><span class="o">.</span><span class="n">CreateMessageResult</span><span class="p">(</span>
+        <span class="n">role</span><span class="o">=</span><span class="s2">&quot;assistant&quot;</span><span class="p">,</span>
+        <span class="n">content</span><span class="o">=</span><span class="n">types</span><span class="o">.</span><span class="n">TextContent</span><span class="p">(</span>
+            <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
+            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Generated response from the model&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">,</span>
+        <span class="n">stopReason</span><span class="o">=</span><span class="s2">&quot;endTurn&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="c1"># Create a session with the sampling callback</span>
+<span class="k">async</span> <span class="k">with</span> <span class="n">ClientSession</span><span class="p">(</span>
+    <span class="n">read</span><span class="p">,</span> <span class="n">write</span><span class="p">,</span> <span class="n">sampling_callback</span><span class="o">=</span><span class="n">handle_sampling_message</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+    <span class="c1"># Now the session can handle message creation requests</span>
+</pre></div>
+</div>
+</section>
+<section id="error-handling">
+<h2>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading"></a></h2>
+<p>Handle errors from the MCP server:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mcp.exceptions</span> <span class="kn">import</span> <span class="n">MCPError</span><span class="p">,</span> <span class="n">ResourceNotFoundError</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">content</span><span class="p">,</span> <span class="n">mime_type</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">read_resource</span><span class="p">(</span><span class="s2">&quot;file://nonexistent.txt&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">ResourceNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Resource not found: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">MCPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MCP error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="integration-with-llms">
+<h2>Integration with LLMs<a class="headerlink" href="#integration-with-llms" title="Link to this heading"></a></h2>
+<p>Integrating MCP with LLM frameworks:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example with LlamaIndex</span>
+<span class="kn">from</span> <span class="nn">llama_index.core</span> <span class="kn">import</span> <span class="n">Settings</span><span class="p">,</span> <span class="n">VectorStoreIndex</span>
+<span class="kn">from</span> <span class="nn">llama_index.core.tools</span> <span class="kn">import</span> <span class="n">FunctionTool</span>
+<span class="kn">from</span> <span class="nn">llama_index.llms.openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+
+<span class="c1"># Create OpenAI LLM</span>
+<span class="n">llm</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">)</span>
+<span class="n">Settings</span><span class="o">.</span><span class="n">llm</span> <span class="o">=</span> <span class="n">llm</span>
+
+<span class="c1"># List tools from MCP server</span>
+<span class="n">tools</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">list_tools</span><span class="p">()</span>
+
+<span class="c1"># Convert MCP tools to LlamaIndex tools</span>
+<span class="n">llamaindex_tools</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">tool</span> <span class="ow">in</span> <span class="n">tools</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">tool_fn</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">call_tool</span><span class="p">(</span><span class="n">tool</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">arguments</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">llamaindex_tools</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">FunctionTool</span><span class="o">.</span><span class="n">from_defaults</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">tool</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="n">tool</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+        <span class="n">fn</span><span class="o">=</span><span class="n">tool_fn</span><span class="p">,</span>
+    <span class="p">))</span>
+
+<span class="c1"># Use tools with LlamaIndex agent</span>
+<span class="n">agent</span> <span class="o">=</span> <span class="n">OpenAIAgent</span><span class="o">.</span><span class="n">from_tools</span><span class="p">(</span><span class="n">llamaindex_tools</span><span class="p">,</span> <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">agent</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span><span class="s2">&quot;Can you search for information about X?&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Handle Reconnection</strong>: Implement reconnection logic for network failures</p></li>
+<li><p><strong>Graceful Degradation</strong>: Handle missing capabilities gracefully</p></li>
+<li><p><strong>Resource Caching</strong>: Cache resources to reduce repeated requests</p></li>
+<li><p><strong>Type Checking</strong>: Validate arguments before sending to the server</p></li>
+<li><p><strong>Security</strong>: Always validate and sanitize data received from servers</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="server-guide.html" class="btn btn-neutral float-left" title="Building MCP Servers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="examples.html" class="btn btn-neutral float-right" title="MCP Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Model Context Protocol.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

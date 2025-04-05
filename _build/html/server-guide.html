@@ -1,0 +1,365 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Building MCP Servers &mdash; MCP Python SDK 1.6.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=d8a309f0" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=72d88caf"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Building MCP Clients" href="client-guide.html" />
+    <link rel="prev" title="Getting Started with MCP Python SDK" href="getting-started.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MCP Python SDK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction to Model Context Protocol (MCP)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started with MCP Python SDK</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Building MCP Servers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#server-types">Server Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-fastmcp">Using FastMCP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#server-with-lifespan">Server with Lifespan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#resources">Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tools">Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prompts">Prompts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#images">Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#context">Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mounting-to-an-existing-asgi-server">Mounting to an Existing ASGI Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#low-level-server-api">Low-Level Server API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#best-practices">Best Practices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="client-guide.html">Building MCP Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">MCP Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced-topics.html">Advanced MCP Topics</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MCP Python SDK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Building MCP Servers</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/server-guide.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="building-mcp-servers">
+<h1>Building MCP Servers<a class="headerlink" href="#building-mcp-servers" title="Link to this heading"></a></h1>
+<p>This guide covers how to build MCP servers using the Python SDK. We’ll explore server setup, resources, tools, prompts, and other important features.</p>
+<section id="server-types">
+<h2>Server Types<a class="headerlink" href="#server-types" title="Link to this heading"></a></h2>
+<p>The MCP Python SDK provides two main ways to create servers:</p>
+<ol class="arabic simple">
+<li><p><strong>FastMCP</strong>: A high-level API for quickly creating servers with minimal boilerplate</p></li>
+<li><p><strong>Server</strong>: A low-level API for more control over the server lifecycle</p></li>
+</ol>
+</section>
+<section id="using-fastmcp">
+<h2>Using FastMCP<a class="headerlink" href="#using-fastmcp" title="Link to this heading"></a></h2>
+<p>FastMCP is the recommended way to create MCP servers for most use cases:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mcp.server.fastmcp</span> <span class="kn">import</span> <span class="n">FastMCP</span>
+
+<span class="c1"># Create a server with a name</span>
+<span class="n">mcp</span> <span class="o">=</span> <span class="n">FastMCP</span><span class="p">(</span><span class="s2">&quot;My Application&quot;</span><span class="p">)</span>
+
+<span class="c1"># Specify dependencies for deployment and development</span>
+<span class="n">mcp</span> <span class="o">=</span> <span class="n">FastMCP</span><span class="p">(</span><span class="s2">&quot;My Application&quot;</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pandas&quot;</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">])</span>
+
+<span class="c1"># Start the server</span>
+<span class="n">mcp</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>  <span class="c1"># Defaults to localhost:8000</span>
+</pre></div>
+</div>
+</section>
+<section id="server-with-lifespan">
+<h2>Server with Lifespan<a class="headerlink" href="#server-with-lifespan" title="Link to this heading"></a></h2>
+<p>You can add lifespan support for managing startup/shutdown with strong typing:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">asynccontextmanager</span>
+<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">AsyncIterator</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="kn">from</span> <span class="nn">fake_database</span> <span class="kn">import</span> <span class="n">Database</span>  <span class="c1"># Replace with your actual DB type</span>
+
+<span class="kn">from</span> <span class="nn">mcp.server.fastmcp</span> <span class="kn">import</span> <span class="n">Context</span><span class="p">,</span> <span class="n">FastMCP</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">AppContext</span><span class="p">:</span>
+    <span class="n">db</span><span class="p">:</span> <span class="n">Database</span>
+
+<span class="nd">@asynccontextmanager</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">app_lifespan</span><span class="p">(</span><span class="n">server</span><span class="p">:</span> <span class="n">FastMCP</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="n">AppContext</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Manage application lifecycle with type-safe context&quot;&quot;&quot;</span>
+    <span class="c1"># Initialize on startup</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Database</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">AppContext</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="c1"># Cleanup on shutdown</span>
+        <span class="k">await</span> <span class="n">db</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+
+
+<span class="c1"># Pass lifespan to server</span>
+<span class="n">mcp</span> <span class="o">=</span> <span class="n">FastMCP</span><span class="p">(</span><span class="s2">&quot;My App&quot;</span><span class="p">,</span> <span class="n">lifespan</span><span class="o">=</span><span class="n">app_lifespan</span><span class="p">)</span>
+
+
+<span class="c1"># Access type-safe lifespan context in tools</span>
+<span class="nd">@mcp</span><span class="o">.</span><span class="n">tool</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">query_db</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">Context</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tool that uses initialized resources&quot;&quot;&quot;</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">request_context</span><span class="o">.</span><span class="n">lifespan_context</span><span class="p">[</span><span class="s2">&quot;db&quot;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
+<p>Resources are how you expose data to LLMs. They’re similar to GET endpoints in a REST API - they provide data but shouldn’t perform significant computation or have side effects:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mcp.server.fastmcp</span> <span class="kn">import</span> <span class="n">FastMCP</span>
+
+<span class="n">mcp</span> <span class="o">=</span> <span class="n">FastMCP</span><span class="p">(</span><span class="s2">&quot;My Application&quot;</span><span class="p">)</span>
+
+<span class="nd">@mcp</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s2">&quot;config://app&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get_config</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Static configuration data&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;App configuration here&quot;</span>
+
+<span class="nd">@mcp</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s2">&quot;users://</span><span class="si">{user_id}</span><span class="s2">/profile&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get_user_profile</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dynamic user data&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Profile data for user </span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p>Resources support different return types:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">str</span></code>: Plain text</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bytes</span></code>: Binary data</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dict</span></code>: JSON data</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Image</span></code>: Image data with automatic format handling</p></li>
+<li><p>Tuple of <code class="docutils literal notranslate"><span class="pre">(data,</span> <span class="pre">mime_type)</span></code>: Custom MIME type</p></li>
+</ul>
+</section>
+<section id="tools">
+<h2>Tools<a class="headerlink" href="#tools" title="Link to this heading"></a></h2>
+<p>Tools let LLMs take actions through your server. Unlike resources, tools are expected to perform computation and have side effects:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">httpx</span>
+<span class="kn">from</span> <span class="nn">mcp.server.fastmcp</span> <span class="kn">import</span> <span class="n">FastMCP</span>
+
+<span class="n">mcp</span> <span class="o">=</span> <span class="n">FastMCP</span><span class="p">(</span><span class="s2">&quot;My Application&quot;</span><span class="p">)</span>
+
+<span class="nd">@mcp</span><span class="o">.</span><span class="n">tool</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">calculate_bmi</span><span class="p">(</span><span class="n">weight_kg</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">height_m</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate BMI given weight in kg and height in meters&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">weight_kg</span> <span class="o">/</span> <span class="p">(</span><span class="n">height_m</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="nd">@mcp</span><span class="o">.</span><span class="n">tool</span><span class="p">()</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">fetch_weather</span><span class="p">(</span><span class="n">city</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetch current weather for a city&quot;&quot;&quot;</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;https://api.weather.com/</span><span class="si">{</span><span class="n">city</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
+</pre></div>
+</div>
+</section>
+<section id="prompts">
+<h2>Prompts<a class="headerlink" href="#prompts" title="Link to this heading"></a></h2>
+<p>Prompts are reusable templates that help LLMs interact with your server effectively:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mcp.server.fastmcp</span> <span class="kn">import</span> <span class="n">FastMCP</span>
+<span class="kn">from</span> <span class="nn">mcp.server.fastmcp.prompts</span> <span class="kn">import</span> <span class="n">base</span>
+
+<span class="n">mcp</span> <span class="o">=</span> <span class="n">FastMCP</span><span class="p">(</span><span class="s2">&quot;My Application&quot;</span><span class="p">)</span>
+
+<span class="nd">@mcp</span><span class="o">.</span><span class="n">prompt</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">review_code</span><span class="p">(</span><span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Please review this code:</span><span class="se">\n\n</span><span class="si">{</span><span class="n">code</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="nd">@mcp</span><span class="o">.</span><span class="n">prompt</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">debug_error</span><span class="p">(</span><span class="n">error</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">base</span><span class="o">.</span><span class="n">Message</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">base</span><span class="o">.</span><span class="n">UserMessage</span><span class="p">(</span><span class="s2">&quot;I&#39;m seeing this error:&quot;</span><span class="p">),</span>
+        <span class="n">base</span><span class="o">.</span><span class="n">UserMessage</span><span class="p">(</span><span class="n">error</span><span class="p">),</span>
+        <span class="n">base</span><span class="o">.</span><span class="n">AssistantMessage</span><span class="p">(</span><span class="s2">&quot;I&#39;ll help debug that. What have you tried so far?&quot;</span><span class="p">),</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="images">
+<h2>Images<a class="headerlink" href="#images" title="Link to this heading"></a></h2>
+<p>FastMCP provides an <code class="docutils literal notranslate"><span class="pre">Image</span></code> class that automatically handles image data:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mcp.server.fastmcp</span> <span class="kn">import</span> <span class="n">FastMCP</span><span class="p">,</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span> <span class="k">as</span> <span class="n">PILImage</span>
+
+<span class="n">mcp</span> <span class="o">=</span> <span class="n">FastMCP</span><span class="p">(</span><span class="s2">&quot;My Application&quot;</span><span class="p">)</span>
+
+<span class="nd">@mcp</span><span class="o">.</span><span class="n">tool</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">create_thumbnail</span><span class="p">(</span><span class="n">image_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Image</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a thumbnail from an image&quot;&quot;&quot;</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">PILImage</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
+    <span class="n">img</span><span class="o">.</span><span class="n">thumbnail</span><span class="p">((</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">Image</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">img</span><span class="o">.</span><span class="n">tobytes</span><span class="p">(),</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="context">
+<h2>Context<a class="headerlink" href="#context" title="Link to this heading"></a></h2>
+<p>The Context object gives your tools and resources access to MCP capabilities:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mcp.server.fastmcp</span> <span class="kn">import</span> <span class="n">FastMCP</span><span class="p">,</span> <span class="n">Context</span>
+
+<span class="n">mcp</span> <span class="o">=</span> <span class="n">FastMCP</span><span class="p">(</span><span class="s2">&quot;My Application&quot;</span><span class="p">)</span>
+
+<span class="nd">@mcp</span><span class="o">.</span><span class="n">tool</span><span class="p">()</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">long_task</span><span class="p">(</span><span class="n">files</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">Context</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Process multiple files with progress tracking&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
+        <span class="n">ctx</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">report_progress</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">))</span>
+        <span class="n">data</span><span class="p">,</span> <span class="n">mime_type</span> <span class="o">=</span> <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">read_resource</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;file://</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;Processing complete&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="mounting-to-an-existing-asgi-server">
+<h2>Mounting to an Existing ASGI Server<a class="headerlink" href="#mounting-to-an-existing-asgi-server" title="Link to this heading"></a></h2>
+<p>You can mount the SSE server to an existing ASGI server using the <code class="docutils literal notranslate"><span class="pre">sse_app</span></code> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">starlette.applications</span> <span class="kn">import</span> <span class="n">Starlette</span>
+<span class="kn">from</span> <span class="nn">starlette.routing</span> <span class="kn">import</span> <span class="n">Mount</span><span class="p">,</span> <span class="n">Host</span>
+<span class="kn">from</span> <span class="nn">mcp.server.fastmcp</span> <span class="kn">import</span> <span class="n">FastMCP</span>
+
+<span class="n">mcp</span> <span class="o">=</span> <span class="n">FastMCP</span><span class="p">(</span><span class="s2">&quot;My Application&quot;</span><span class="p">)</span>
+
+<span class="c1"># Mount the SSE server to the existing ASGI server</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">Starlette</span><span class="p">(</span>
+    <span class="n">routes</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">Mount</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="n">mcp</span><span class="o">.</span><span class="n">sse_app</span><span class="p">()),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># or dynamically mount as host</span>
+<span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Host</span><span class="p">(</span><span class="s1">&#39;mcp.acme.corp&#39;</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="n">mcp</span><span class="o">.</span><span class="n">sse_app</span><span class="p">()))</span>
+</pre></div>
+</div>
+</section>
+<section id="low-level-server-api">
+<h2>Low-Level Server API<a class="headerlink" href="#low-level-server-api" title="Link to this heading"></a></h2>
+<p>For more control, you can use the low-level Server API:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">asynccontextmanager</span>
+<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">AsyncIterator</span>
+
+<span class="kn">from</span> <span class="nn">mcp.server</span> <span class="kn">import</span> <span class="n">Server</span>
+<span class="kn">import</span> <span class="nn">mcp.types</span> <span class="k">as</span> <span class="nn">types</span>
+
+<span class="c1"># Lifecycle management</span>
+<span class="nd">@asynccontextmanager</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">server_lifespan</span><span class="p">(</span><span class="n">server</span><span class="p">:</span> <span class="n">Server</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+    <span class="c1"># Initialize resources on startup</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Database</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="p">{</span><span class="s2">&quot;db&quot;</span><span class="p">:</span> <span class="n">db</span><span class="p">}</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="c1"># Clean up on shutdown</span>
+        <span class="k">await</span> <span class="n">db</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+
+<span class="c1"># Create a server with a name and lifespan</span>
+<span class="n">server</span> <span class="o">=</span> <span class="n">Server</span><span class="p">(</span><span class="s2">&quot;example-server&quot;</span><span class="p">,</span> <span class="n">lifespan</span><span class="o">=</span><span class="n">server_lifespan</span><span class="p">)</span>
+
+<span class="c1"># Access lifespan context in handlers</span>
+<span class="nd">@server</span><span class="o">.</span><span class="n">call_tool</span><span class="p">()</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">query_db</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">arguments</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+    <span class="n">ctx</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">request_context</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">lifespan_context</span><span class="p">[</span><span class="s2">&quot;db&quot;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">arguments</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Descriptive Names</strong>: Use clear, descriptive names for resources, tools, and prompts</p></li>
+<li><p><strong>Comprehensive Documentation</strong>: Provide detailed descriptions so models know when and how to use your primitives</p></li>
+<li><p><strong>Error Handling</strong>: Handle errors gracefully and return meaningful error messages</p></li>
+<li><p><strong>Type Hints</strong>: Use Python type hints to ensure correct parameter types</p></li>
+<li><p><strong>Resource Schemas</strong>: Use URL patterns that represent the data hierarchy logically</p></li>
+<li><p><strong>Security</strong>: Validate inputs and limit access to sensitive operations</p></li>
+<li><p><strong>Strong Typing</strong>: Use dataclasses and type annotations for lifecycle context</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="getting-started.html" class="btn btn-neutral float-left" title="Getting Started with MCP Python SDK" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="client-guide.html" class="btn btn-neutral float-right" title="Building MCP Clients" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Model Context Protocol.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
