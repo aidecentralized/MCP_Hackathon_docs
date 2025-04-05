@@ -1,0 +1,111 @@
+/* Custom styles for MCP documentation */
+
+/* Improve code block appearance */
+.highlight {
+    background: #f8f8f8;
+    border-radius: 4px;
+    border-left: 4px solid #2980b9;
+}
+
+/* Improve headings */
+h1, h2, h3, h4, h5, h6 {
+    color: #2c3e50;
+    font-weight: 700;
+}
+
+/* Emphasis for important elements */
+.rst-content .important {
+    background: #eefbff;
+    border-color: #3498db;
+}
+
+.rst-content .note {
+    background: #f6f9fe;
+    border-color: #29abe2;
+}
+
+/* Better tables */
+.wy-table-responsive table td, 
+.wy-table-responsive table th {
+    white-space: normal;
+}
+
+.wy-table-responsive {
+    margin-bottom: 24px;
+    max-width: 100%;
+    overflow: visible;
+}
+
+/* Sidebar styling */
+.wy-nav-side {
+    background: #2c3e50;
+}
+
+.wy-side-nav-search {
+    background-color: #3498db;
+}
+
+.wy-side-nav-search input[type="text"] {
+    border-color: #2980b9;
+}
+
+.wy-menu-vertical a {
+    color: #bdc3c7;
+}
+
+.wy-menu-vertical a:hover {
+    background-color: #34495e;
+    color: #fff;
+}
+
+/* Link colors */
+a {
+    color: #3498db;
+}
+
+a:hover {
+    color: #2980b9;
+}
+
+/* Code literals */
+.rst-content code.literal {
+    color: #e74c3c;
+    background: #f9f2f4;
+    border: none;
+    padding: 2px 4px;
+}
+
+/* Function/class parameters */
+.sig-param {
+    font-style: italic;
+}
+
+/* API Reference styling */
+dl.class, dl.function, dl.method, dl.attribute {
+    padding: 15px;
+    background: #fcfcfc;
+    border-left: 3px solid #3498db;
+    margin-bottom: 20px;
+}
+
+dl.class dt, dl.function dt, dl.method dt, dl.attribute dt {
+    font-weight: 700;
+    background: #f4f4f4;
+}
+
+/* Improved list appearance */
+.rst-content ul li, .rst-content ol li {
+    margin-bottom: 8px;
+}
+
+/* Add some spacing */
+.rst-content .section {
+    margin-bottom: 30px;
+}
+
+/* Mobile improvements */
+@media screen and (max-width: 768px) {
+    .wy-nav-top {
+        background-color: #2c3e50;
+    }
+} 
