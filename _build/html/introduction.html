@@ -6,15 +6,16 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Introduction to Model Context Protocol (MCP) &mdash; MCP Python SDK 1.6.0 documentation</title>
+  <title>Introduction to Model Context Protocol (MCP) &mdash; Model Context Protocol (MCP) Python SDK  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=d8a309f0" />
 
   
+    <link rel="canonical" href="/mcp_docs/introduction.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=72d88caf"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -33,7 +34,7 @@
           
           
           <a href="index.html" class="icon icon-home">
-            MCP Python SDK
+            Model Context Protocol (MCP) Python SDK
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -47,8 +48,10 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction to Model Context Protocol (MCP)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#what-is-mcp">What is MCP?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#about-fastmcp">About FastMCP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#core-concepts">Core Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#benefits-of-mcp">Benefits of MCP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-mcp-servers">Running MCP Servers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#about-this-documentation">About This Documentation</a></li>
 </ul>
 </li>
@@ -66,7 +69,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">MCP Python SDK</a>
+          <a href="index.html">Model Context Protocol (MCP) Python SDK</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -76,7 +79,6 @@
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Introduction to Model Context Protocol (MCP)</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/introduction.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -96,6 +98,28 @@
 <li><p><strong>Take actions</strong> through function calling with tools</p></li>
 <li><p><strong>Generate structured prompts</strong> for specific use cases</p></li>
 </ol>
+</section>
+<section id="about-fastmcp">
+<h2>About FastMCP<a class="headerlink" href="#about-fastmcp" title="Link to this heading"></a></h2>
+<p>FastMCP is a high-level, Pythonic interface for building MCP servers. Originally developed as a standalone project, it has now been integrated into the official MCP Python SDK. FastMCP provides a developer-friendly way to create MCP servers with minimal boilerplate.</p>
+<p>Key features of FastMCP:</p>
+<ul class="simple">
+<li><p><strong>Simple decorators</strong> for defining resources, tools, and prompts</p></li>
+<li><p><strong>Automatic type handling</strong> for Python objects, Pydantic models, and images</p></li>
+<li><p><strong>Built-in development tools</strong> for testing and debugging</p></li>
+<li><p><strong>Claude Desktop integration</strong> for seamless deployment</p></li>
+</ul>
+<p>Here’s a minimal example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mcp.server.fastmcp</span> <span class="kn">import</span> <span class="n">FastMCP</span>
+
+<span class="n">mcp</span> <span class="o">=</span> <span class="n">FastMCP</span><span class="p">(</span><span class="s2">&quot;Demo 🚀&quot;</span><span class="p">)</span>
+
+<span class="nd">@mcp</span><span class="o">.</span><span class="n">tool</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add two numbers&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+</pre></div>
+</div>
 </section>
 <section id="core-concepts">
 <h2>Core Concepts<a class="headerlink" href="#core-concepts" title="Link to this heading"></a></h2>
@@ -144,7 +168,18 @@
 <li><p><strong>Customization</strong>: Applications can guide model behavior through structured prompts.</p></li>
 <li><p><strong>Interoperability</strong>: A standard protocol works across different models and applications.</p></li>
 <li><p><strong>Type Safety</strong>: Strong typing for context and data across the protocol.</p></li>
+<li><p><strong>Pythonic</strong>: With FastMCP, build servers using intuitive Python patterns.</p></li>
+<li><p><strong>Development Simplicity</strong>: Streamlined testing and debugging with built-in tools.</p></li>
 </ul>
+</section>
+<section id="running-mcp-servers">
+<h2>Running MCP Servers<a class="headerlink" href="#running-mcp-servers" title="Link to this heading"></a></h2>
+<p>There are three main ways to use your MCP server:</p>
+<ol class="arabic simple">
+<li><p><strong>Development Mode</strong>: Test with the MCP Inspector web interface (<code class="docutils literal notranslate"><span class="pre">mcp</span> <span class="pre">dev</span> <span class="pre">server.py</span></code>)</p></li>
+<li><p><strong>Claude Desktop Integration</strong>: Add to Claude Desktop for regular use (<code class="docutils literal notranslate"><span class="pre">mcp</span> <span class="pre">install</span> <span class="pre">server.py</span></code>)</p></li>
+<li><p><strong>Direct Execution</strong>: Run standalone for custom deployments (<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">server.py</span></code>)</p></li>
+</ol>
 </section>
 <section id="about-this-documentation">
 <h2>About This Documentation<a class="headerlink" href="#about-this-documentation" title="Link to this heading"></a></h2>
@@ -170,7 +205,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Model Context Protocol.</p>
+    <p>&#169; Copyright 2023, Model Context Protocol.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

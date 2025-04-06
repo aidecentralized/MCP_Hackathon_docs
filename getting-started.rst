@@ -66,6 +66,44 @@ To run the mcp command:
    # With pip
    mcp
 
+Learning Resources
+-----------------
+
+The following resources provide excellent practical examples for getting started with MCP server development:
+
+Official MCP Weather Server Tutorial
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. raw:: html
+
+   <div style="margin-bottom: 20px;">
+   <iframe src="https://modelcontextprotocol.io/quickstart/server" style="width: 100%; height: 500px; border: 1px solid #ddd; border-radius: 5px;"></iframe>
+   </div>
+
+This official tutorial walks you through building a weather API server that connects to Claude Desktop.
+
+Basic Python MCP Server Example
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. raw:: html
+
+   <div style="margin-bottom: 20px;">
+   <iframe width="100%" height="400" src="https://www.youtube.com/embed/wa_A0qY0anA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+   </div>
+
+This video demonstrates how to create a simple MCP server for counting occurrences of the letter 'r' in words, with insights on integrating with Claude Desktop.
+
+MCP Server with Cursor AI Integration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. raw:: html
+
+   <div style="margin-bottom: 20px;">
+   <iframe width="100%" height="400" src="https://www.youtube.com/embed/L94WBLL0KjY?start=438" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+   </div>
+
+This tutorial explains how to build an MCP server and integrate it with the Cursor AI code editor.
+
 Quickstart
 ---------
 

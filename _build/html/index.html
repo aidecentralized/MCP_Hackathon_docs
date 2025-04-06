@@ -6,15 +6,16 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Model Context Protocol (MCP) Python SDK &mdash; MCP Python SDK 1.6.0 documentation</title>
+  <title>Model Context Protocol (MCP) Python SDK &mdash; Model Context Protocol (MCP) Python SDK  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=d8a309f0" />
 
   
+    <link rel="canonical" href="/mcp_docs/index.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=72d88caf"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -32,7 +33,7 @@
           
           
           <a href="#" class="icon icon-home">
-            MCP Python SDK
+            Model Context Protocol (MCP) Python SDK
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -59,7 +60,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">MCP Python SDK</a>
+          <a href="#">Model Context Protocol (MCP) Python SDK</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -69,7 +70,6 @@
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Model Context Protocol (MCP) Python SDK</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -84,13 +84,16 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction to Model Context Protocol (MCP)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="introduction.html#what-is-mcp">What is MCP?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#about-fastmcp">About FastMCP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="introduction.html#core-concepts">Core Concepts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="introduction.html#benefits-of-mcp">Benefits of MCP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#running-mcp-servers">Running MCP Servers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="introduction.html#about-this-documentation">About This Documentation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started with MCP Python SDK</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="getting-started.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#learning-resources">Learning Resources</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting-started.html#quickstart">Quickstart</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting-started.html#running-your-server">Running Your Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting-started.html#next-steps">Next Steps</a></li>
@@ -105,6 +108,7 @@
 <li class="toctree-l2"><a class="reference internal" href="server-guide.html#prompts">Prompts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="server-guide.html#images">Images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="server-guide.html#context">Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server-guide.html#running-your-server">Running Your Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="server-guide.html#mounting-to-an-existing-asgi-server">Mounting to an Existing ASGI Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="server-guide.html#low-level-server-api">Low-Level Server API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="server-guide.html#best-practices">Best Practices</a></li>
@@ -125,8 +129,11 @@
 <li class="toctree-l1"><a class="reference internal" href="examples.html">MCP Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#echo-server">Echo Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#sqlite-explorer">SQLite Explorer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#image-processing-example">Image Processing Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#file-explorer">File Explorer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#server-with-context-and-lifespan">Server with Context and Lifespan</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#weather-api-server">Weather API Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#running-examples">Running Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html#other-example-ideas">Other Example Ideas</a></li>
 </ul>
 </li>
@@ -135,8 +142,8 @@
 <li class="toctree-l2"><a class="reference internal" href="api-reference.html#client-api">Client API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api-reference.html#type-definitions">Type Definitions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api-reference.html#prompt-utilities">Prompt Utilities</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api-reference.html#exceptions">Exceptions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api-reference.html#command-line-interface">Command Line Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api-reference.html#exceptions">Exceptions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api-reference.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -172,7 +179,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Model Context Protocol.</p>
+    <p>&#169; Copyright 2023, Model Context Protocol.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

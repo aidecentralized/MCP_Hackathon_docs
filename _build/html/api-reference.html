@@ -6,15 +6,16 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>API Reference &mdash; MCP Python SDK 1.6.0 documentation</title>
+  <title>API Reference &mdash; Model Context Protocol (MCP) Python SDK  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=d8a309f0" />
 
   
+    <link rel="canonical" href="/mcp_docs/api-reference.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=72d88caf"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -33,7 +34,7 @@
           
           
           <a href="index.html" class="icon icon-home">
-            MCP Python SDK
+            Model Context Protocol (MCP) Python SDK
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -55,6 +56,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#fastmcp">FastMCP</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#context">Context</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#image">Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#complex-types-with-pydantic">Complex Types with Pydantic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#server-with-lifespan">Server with Lifespan</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#server">Server</a></li>
 </ul>
 </li>
@@ -65,8 +68,12 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#type-definitions">Type Definitions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#prompt-utilities">Prompt Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#command-line-interface">Command Line Interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#development-mode-options">Development Mode Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installation-options">Installation Options</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#exceptions">Exceptions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#command-line-interface">Command Line Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -79,7 +86,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">MCP Python SDK</a>
+          <a href="index.html">Model Context Protocol (MCP) Python SDK</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -89,7 +96,6 @@
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">API Reference</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/api-reference.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -152,6 +158,9 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">error(message:</span> <span class="pre">str)</span></code> - Log an error message</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">read_resource(uri:</span> <span class="pre">str)</span></code> - Read a resource</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">report_progress(current:</span> <span class="pre">int,</span> <span class="pre">total:</span> <span class="pre">int)</span></code> - Report progress of a long-running task</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">debug(message:</span> <span class="pre">str)</span></code> - Log a debug message</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">request_id</span></code> - Get the current request ID</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">client_id</span></code> - Get the client ID</p></li>
 </ul>
 </section>
 <section id="image">
@@ -167,6 +176,12 @@
     <span class="n">img</span> <span class="o">=</span> <span class="n">PILImage</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
     <span class="n">img</span><span class="o">.</span><span class="n">thumbnail</span><span class="p">((</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">Image</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">img</span><span class="o">.</span><span class="n">tobytes</span><span class="p">(),</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">)</span>
+
+<span class="nd">@mcp</span><span class="o">.</span><span class="n">tool</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">load_image</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Image</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load an image from disk&quot;&quot;&quot;</span>
+    <span class="c1"># FastMCP handles reading and format detection</span>
+    <span class="k">return</span> <span class="n">Image</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Attributes and methods:</p>
@@ -175,7 +190,68 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">format</span></code> - Image format (e.g., “png”, “jpeg”)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">mime_type</span></code> - Mime type of the image</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">from_pil(pil_image)</span></code> - Create an Image from a PIL Image</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">path</span></code> - Source path for loading images from disk</p></li>
 </ul>
+</section>
+<section id="complex-types-with-pydantic">
+<h3>Complex Types with Pydantic<a class="headerlink" href="#complex-types-with-pydantic" title="Link to this heading"></a></h3>
+<p>FastMCP supports complex input types using Pydantic models:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Annotated</span>
+<span class="kn">from</span> <span class="nn">mcp.server.fastmcp</span> <span class="kn">import</span> <span class="n">FastMCP</span>
+
+<span class="k">class</span> <span class="nc">ShrimpTank</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Shrimp</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">)]</span>
+
+    <span class="n">shrimp</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Shrimp</span><span class="p">]</span>
+
+<span class="n">mcp</span> <span class="o">=</span> <span class="n">FastMCP</span><span class="p">(</span><span class="s2">&quot;Shrimp Manager&quot;</span><span class="p">)</span>
+
+<span class="nd">@mcp</span><span class="o">.</span><span class="n">tool</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">name_shrimp</span><span class="p">(</span>
+    <span class="n">tank</span><span class="p">:</span> <span class="n">ShrimpTank</span><span class="p">,</span>
+    <span class="c1"># Field validation in function signatures</span>
+    <span class="n">extra_names</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">)],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;List all shrimp names in the tank&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">shrimp</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">shrimp</span> <span class="ow">in</span> <span class="n">tank</span><span class="o">.</span><span class="n">shrimp</span><span class="p">]</span> <span class="o">+</span> <span class="n">extra_names</span>
+</pre></div>
+</div>
+</section>
+<section id="server-with-lifespan">
+<h3>Server with Lifespan<a class="headerlink" href="#server-with-lifespan" title="Link to this heading"></a></h3>
+<p>Setting up servers with typed lifespan support:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">asynccontextmanager</span>
+<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">AsyncIterator</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">mcp.server.fastmcp</span> <span class="kn">import</span> <span class="n">FastMCP</span><span class="p">,</span> <span class="n">Context</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">AppContext</span><span class="p">:</span>
+    <span class="n">db</span><span class="p">:</span> <span class="n">Database</span>  <span class="c1"># Your database type</span>
+
+<span class="nd">@asynccontextmanager</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">app_lifespan</span><span class="p">(</span><span class="n">server</span><span class="p">:</span> <span class="n">FastMCP</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="n">AppContext</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Manage application lifecycle with type-safe context&quot;&quot;&quot;</span>
+    <span class="c1"># Initialize on startup</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Database</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">AppContext</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="c1"># Cleanup on shutdown</span>
+        <span class="k">await</span> <span class="n">db</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+
+<span class="c1"># Pass lifespan to server</span>
+<span class="n">mcp</span> <span class="o">=</span> <span class="n">FastMCP</span><span class="p">(</span><span class="s2">&quot;My App&quot;</span><span class="p">,</span> <span class="n">lifespan</span><span class="o">=</span><span class="n">app_lifespan</span><span class="p">)</span>
+
+<span class="nd">@mcp</span><span class="o">.</span><span class="n">tool</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">query_db</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">Context</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tool that uses initialized resources&quot;&quot;&quot;</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">request_context</span><span class="o">.</span><span class="n">lifespan_context</span><span class="p">[</span><span class="s2">&quot;db&quot;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">()</span>
+</pre></div>
+</div>
 </section>
 <section id="server">
 <h3>Server<a class="headerlink" href="#server" title="Link to this heading"></a></h3>
@@ -330,6 +406,46 @@
 </pre></div>
 </div>
 </section>
+<section id="command-line-interface">
+<h2>Command Line Interface<a class="headerlink" href="#command-line-interface" title="Link to this heading"></a></h2>
+<p>The MCP CLI provides utilities for working with MCP servers:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run the server directly</span>
+mcp<span class="w"> </span>run<span class="w"> </span>server.py
+
+<span class="c1"># Test and debug with the MCP Inspector</span>
+mcp<span class="w"> </span>dev<span class="w"> </span>server.py
+
+<span class="c1"># Install in Claude Desktop</span>
+mcp<span class="w"> </span>install<span class="w"> </span>server.py
+</pre></div>
+</div>
+<section id="development-mode-options">
+<h3>Development Mode Options<a class="headerlink" href="#development-mode-options" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add dependencies for testing</span>
+mcp<span class="w"> </span>dev<span class="w"> </span>server.py<span class="w"> </span>--with<span class="w"> </span>pandas<span class="w"> </span>--with<span class="w"> </span>numpy
+
+<span class="c1"># Mount local code for live updates</span>
+mcp<span class="w"> </span>dev<span class="w"> </span>server.py<span class="w"> </span>--with-editable<span class="w"> </span>.
+</pre></div>
+</div>
+</section>
+<section id="installation-options">
+<h3>Installation Options<a class="headerlink" href="#installation-options" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Custom server name</span>
+mcp<span class="w"> </span>install<span class="w"> </span>server.py<span class="w"> </span>--name<span class="w"> </span><span class="s2">&quot;My Analytics Server&quot;</span>
+
+<span class="c1"># Environment variables (individual)</span>
+mcp<span class="w"> </span>install<span class="w"> </span>server.py<span class="w"> </span>-e<span class="w"> </span><span class="nv">API_KEY</span><span class="o">=</span>abc123<span class="w"> </span>-e<span class="w"> </span><span class="nv">DB_URL</span><span class="o">=</span>postgres://...
+
+<span class="c1"># Environment variables (from file)</span>
+mcp<span class="w"> </span>install<span class="w"> </span>server.py<span class="w"> </span>-f<span class="w"> </span>.env
+
+<span class="c1"># Custom server variable</span>
+mcp<span class="w"> </span>install<span class="w"> </span>server.py:my_custom_server
+</pre></div>
+</div>
+</section>
+</section>
 <section id="exceptions">
 <h2>Exceptions<a class="headerlink" href="#exceptions" title="Link to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">mcp.exceptions</span></code> module provides exception classes for error handling:</p>
@@ -353,23 +469,6 @@
 <span class="k">except</span> <span class="n">MCPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
     <span class="c1"># Handle any MCP error</span>
     <span class="k">pass</span>
-</pre></div>
-</div>
-</section>
-<section id="command-line-interface">
-<h2>Command Line Interface<a class="headerlink" href="#command-line-interface" title="Link to this heading"></a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">mcp</span></code> CLI provides utilities for working with MCP servers:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run the server</span>
-mcp<span class="w"> </span>run<span class="w"> </span>server.py
-
-<span class="c1"># Test and debug with the MCP Inspector</span>
-mcp<span class="w"> </span>dev<span class="w"> </span>server.py
-
-<span class="c1"># Install in Claude Desktop</span>
-mcp<span class="w"> </span>install<span class="w"> </span>server.py
-
-<span class="c1"># Custom commands</span>
-mcp<span class="w"> </span>install<span class="w"> </span>server.py<span class="w"> </span>--name<span class="w"> </span><span class="s2">&quot;My Server&quot;</span><span class="w"> </span>-v<span class="w"> </span><span class="nv">API_KEY</span><span class="o">=</span>abc
 </pre></div>
 </div>
 </section>
@@ -404,7 +503,7 @@ mcp<span class="w"> </span>install<span class="w"> </span>server.py<span class="
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Model Context Protocol.</p>
+    <p>&#169; Copyright 2023, Model Context Protocol.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
