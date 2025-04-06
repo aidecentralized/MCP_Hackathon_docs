@@ -74,13 +74,7 @@ The following resources provide excellent practical examples for getting started
 Official MCP Weather Server Tutorial
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. raw:: html
-
-   <div style="margin-bottom: 20px;">
-   <iframe src="https://modelcontextprotocol.io/quickstart/server" style="width: 100%; height: 500px; border: 1px solid #ddd; border-radius: 5px;"></iframe>
-   </div>
-
-This official tutorial walks you through building a weather API server that connects to Claude Desktop.
+`MCP Weather Server Tutorial <https://modelcontextprotocol.io/quickstart/server>`_ - A comprehensive walkthrough on building a weather API server that connects to Claude Desktop.
 
 Basic Python MCP Server Example
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
