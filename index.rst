@@ -7,6 +7,7 @@ Model Context Protocol (MCP) Python SDK
 
    introduction
    getting-started
+   hackathon
    server-guide
    client-guide
    examples
