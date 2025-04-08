@@ -4,6 +4,9 @@ Hackathon: MCP Weather Server Setup
 This guide will help you quickly get started with adding a basic MCP server to Claude Desktop.
 This workshop will introduce you to adding MCP servers to Claude and using them effectively.
 
+We have created a FAQ google doc for this hackathon, Feel free to check it out and add your questions if not present:
+`MCP Hackathon FAQ <https://docs.google.com/document/d/1Ej7xWB3qgu5Xrev8bL-OqmpOIMeXGffsAEYW0Wo1g0U/edit?tab=t.0#heading=h.zcwam8tin9rt>`_
+
 Prerequisites Part 1
 ------------------
 
@@ -181,6 +184,10 @@ Create a comprehensive dashboard:
 .. code-block:: bash
 
    Let's create a detailed dashboard to visualize the low stock alerts and other insights
+
+For Learning to build your own MCP server in Python, you check out the getting started page of this documentation:
+
+`Getting Started <https://aidecentralized.github.io/MCP_Hackathon_docs/getting-started.html>`_
 
 
 
