@@ -185,9 +185,7 @@ Create a comprehensive dashboard:
 
    Let's create a detailed dashboard to visualize the low stock alerts and other insights
 
-For Learning to build your own MCP server in Python, you check out the getting started page of this documentation:
-
-`Getting Started <https://aidecentralized.github.io/MCP_Hackathon_docs/getting-started.html>`_
+For Learning to build your own MCP server in Python, you check out the getting started page of this documentation: `Getting Started with building MCP server Page<https://aidecentralized.github.io/MCP_Hackathon_docs/getting-started.html>`_
 
 
 
