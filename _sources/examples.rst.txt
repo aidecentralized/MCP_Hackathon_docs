@@ -1,0 +1,237 @@
+MCP Examples
+===========
+
+This page contains practical examples of using the MCP Python SDK for various use cases.
+
+Echo Server
+----------
+
+A simple server demonstrating resources, tools, and prompts:
+
+.. code-block:: python
+
+   from mcp.server.fastmcp import FastMCP
+
+   mcp = FastMCP("Echo")
+
+   @mcp.resource("echo://{message}")
+   def echo_resource(message: str) -> str:
+       """Echo a message as a resource"""
+       return f"Resource echo: {message}"
+
+   @mcp.tool()
+   def echo_tool(message: str) -> str:
+       """Echo a message as a tool"""
+       return f"Tool echo: {message}"
+
+   @mcp.prompt()
+   def echo_prompt(message: str) -> str:
+       """Create an echo prompt"""
+       return f"Please process this message: {message}"
+
+SQLite Explorer
+------------
+
+A more complex example showing database integration:
+
+.. code-block:: python
+
+   import sqlite3
+
+   from mcp.server.fastmcp import FastMCP
+
+   mcp = FastMCP("SQLite Explorer")
+
+   @mcp.resource("schema://main")
+   def get_schema() -> str:
+       """Provide the database schema as a resource"""
+       conn = sqlite3.connect("database.db")
+       schema = conn.execute("SELECT sql FROM sqlite_master WHERE type='table'").fetchall()
+       return "\n".join(sql[0] for sql in schema if sql[0])
+
+   @mcp.tool()
+   def query_data(sql: str) -> str:
+       """Execute SQL queries safely"""
+       conn = sqlite3.connect("database.db")
+       try:
+           result = conn.execute(sql).fetchall()
+           return "\n".join(str(row) for row in result)
+       except Exception as e:
+           return f"Error: {str(e)}"
+
+File Explorer
+-----------
+
+A server that provides access to files in a directory:
+
+.. code-block:: python
+
+   import os
+   from mcp.server.fastmcp import FastMCP
+
+   mcp = FastMCP("File Explorer")
+
+   @mcp.resource("file://{path}")
+   def read_file(path: str) -> tuple:
+       """Read a file from the data directory."""
+       safe_path = os.path.normpath(os.path.join("data", path))
+       if not safe_path.startswith("data"):
+           return "Access denied: path must be within the data directory", "text/plain"
+           
+       if not os.path.exists(safe_path):
+           return f"File not found: {path}", "text/plain"
+           
+       with open(safe_path, "rb") as f:
+           content = f.read()
+           
+       # Determine MIME type based on extension
+       ext = os.path.splitext(path)[1].lower()
+       mime_map = {
+           ".txt": "text/plain",
+           ".md": "text/markdown",
+           ".json": "application/json",
+           ".html": "text/html",
+           ".pdf": "application/pdf",
+           ".png": "image/png",
+           ".jpg": "image/jpeg",
+           ".jpeg": "image/jpeg",
+       }
+       mime_type = mime_map.get(ext, "application/octet-stream")
+       
+       return content, mime_type
+
+   @mcp.resource("dir://{path}")
+   def list_directory(path: str = "") -> dict:
+       """List files in a directory."""
+       safe_path = os.path.normpath(os.path.join("data", path))
+       if not safe_path.startswith("data"):
+           return {"error": "Access denied: path must be within the data directory"}
+           
+       if not os.path.isdir(safe_path):
+           return {"error": f"Directory not found: {path}"}
+           
+       files = []
+       directories = []
+       
+       for item in os.listdir(safe_path):
+           item_path = os.path.join(safe_path, item)
+           if os.path.isdir(item_path):
+               directories.append(item)
+           else:
+               files.append(item)
+               
+       return {
+           "path": path,
+           "directories": directories,
+           "files": files
+       }
+
+   if __name__ == "__main__":
+       os.makedirs("data", exist_ok=True)
+       mcp.run()
+
+Weather API Server
+----------------
+
+A server that provides weather information through an external API:
+
+.. code-block:: python
+
+   import aiohttp
+   from mcp.server.fastmcp import FastMCP
+
+   mcp = FastMCP("Weather API")
+
+   # You'd normally use a real API key in a production environment
+   API_KEY = "YOUR_OPENWEATHERMAP_API_KEY"
+   BASE_URL = "https://api.openweathermap.org/data/2.5"
+
+   @mcp.resource("weather://{location}")
+   async def get_weather(location: str) -> dict:
+       """Get current weather for a location."""
+       async with aiohttp.ClientSession() as session:
+           url = f"{BASE_URL}/weather"
+           params = {
+               "q": location,
+               "appid": API_KEY,
+               "units": "metric"
+           }
+           
+           async with session.get(url, params=params) as response:
+               if response.status != 200:
+                   return {"error": f"Failed to fetch weather: {await response.text()}"}
+                   
+               data = await response.json()
+               return {
+                   "location": location,
+                   "temperature": data["main"]["temp"],
+                   "humidity": data["main"]["humidity"],
+                   "conditions": data["weather"][0]["description"],
+                   "wind_speed": data["wind"]["speed"]
+               }
+
+   @mcp.tool()
+   async def forecast(location: str, days: int = 5) -> dict:
+       """Get weather forecast for a location."""
+       if days > 7:
+           return {"error": "Maximum forecast days is 7"}
+           
+       async with aiohttp.ClientSession() as session:
+           url = f"{BASE_URL}/forecast"
+           params = {
+               "q": location,
+               "appid": API_KEY,
+               "units": "metric",
+               "cnt": days * 8  # API returns data in 3-hour intervals (8 per day)
+           }
+           
+           async with session.get(url, params=params) as response:
+               if response.status != 200:
+                   return {"error": f"Failed to fetch forecast: {await response.text()}"}
+                   
+               data = await response.json()
+               
+               # Process and simplify the forecast data
+               forecast_data = []
+               for item in data["list"]:
+                   forecast_data.append({
+                       "time": item["dt_txt"],
+                       "temperature": item["main"]["temp"],
+                       "conditions": item["weather"][0]["description"]
+                   })
+                   
+               return {
+                   "location": location,
+                   "forecast": forecast_data
+               }
+
+   @mcp.prompt()
+   def weather_assistant(location: str = "") -> dict:
+       """Create a prompt for a weather assistant."""
+       system_content = "You are a weather assistant. You can help users check the weather using the weather resources and forecast tool."
+       
+       user_content = "I'd like to know about the weather."
+       if location:
+           user_content = f"I'd like to know about the weather in {location}."
+           
+       return {
+           "messages": [
+               {"role": "system", "content": system_content},
+               {"role": "user", "content": user_content}
+           ]
+       }
+
+   if __name__ == "__main__":
+       mcp.run()
+
+Other Example Ideas
+-----------------
+
+Here are some other ideas for MCP servers:
+
+1. **Knowledge Base Server**: Expose a vector database for semantic search
+2. **Email Assistant**: Allow models to search, read, and draft emails
+3. **Calendar Manager**: Check availability and schedule meetings
+4. **E-commerce Server**: Search products, check inventory, and place orders
+5. **Social Media Client**: Fetch posts and publish updates
+6. **Code Repository Server**: Browse repositories, view files, and submit PRs 

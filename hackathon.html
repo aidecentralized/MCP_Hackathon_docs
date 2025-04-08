@@ -1,0 +1,294 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hackathon: MCP Weather Server Setup &mdash; Model Context Protocol (MCP) Python SDK  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=d8a309f0" />
+
+  
+    <link rel="canonical" href="/mcp_docs/hackathon.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Building MCP Servers" href="server-guide.html" />
+    <link rel="prev" title="Getting Started with MCP Python SDK" href="getting-started.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Model Context Protocol (MCP) Python SDK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction to Model Context Protocol (MCP)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started with MCP Python SDK</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Hackathon: MCP Weather Server Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites-part-1">Prerequisites Part 1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-the-server-to-claude-desktop">Adding the Server to Claude Desktop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing-the-weather-server">Testing the Weather Server</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#hackathon-docker-sqlite-database-server">Hackathon: Docker SQLite Database Server</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites-part-2">Prerequisites Part 2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-the-sqlite-server-to-claude-desktop">Adding the SQLite Server to Claude Desktop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-the-sqlite-server">Using the SQLite Server</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server-guide.html">Building MCP Servers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client-guide.html">Building MCP Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">MCP Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced-topics.html">Advanced MCP Topics</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Model Context Protocol (MCP) Python SDK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Hackathon: MCP Weather Server Setup</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="hackathon-mcp-weather-server-setup">
+<h1>Hackathon: MCP Weather Server Setup<a class="headerlink" href="#hackathon-mcp-weather-server-setup" title="Link to this heading"></a></h1>
+<p>This guide will help you quickly get started with adding a basic MCP server to Claude Desktop.
+This workshop will introduce you to adding MCP servers to Claude and using them effectively.</p>
+<p>We have created a FAQ google doc for this hackathon, Feel free to check it out and add your questions if not present:
+<a class="reference external" href="https://docs.google.com/document/d/1Ej7xWB3qgu5Xrev8bL-OqmpOIMeXGffsAEYW0Wo1g0U/edit?tab=t.0#heading=h.zcwam8tin9rt">MCP Hackathon FAQ</a></p>
+<section id="prerequisites-part-1">
+<h2>Prerequisites Part 1<a class="headerlink" href="#prerequisites-part-1" title="Link to this heading"></a></h2>
+<p>We will be using Claude Desktop for this Hackathon/Workshop as it is the simplest client to connect with MCP servers.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://claude.ai/download">Claude Desktop</a> - Currently available on Windows and MacOS only</p></li>
+<li><p><a class="reference external" href="https://nodejs.org/en/download">Node.js</a> - Required for installing the weather server example</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Make sure you don’t exhaust your token limit on Claude Desktop or you might have to wait for a while.</p>
+</div>
+<p>For a step-by-step visual guide, you can watch the following tutorial:
+<a class="reference external" href="https://youtu.be/7TtuiNnhwmM">Claude Desktop Tutorial</a></p>
+<p>This example is taken from the <a class="reference external" href="https://socket.dev/npm/package/&#64;h1deya/mcp-server-weather">mcp-weather-server</a> package.</p>
+<p>To install the weather server example, run the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>npm<span class="w"> </span>i<span class="w"> </span>@h1deya/mcp-server-weather
+</pre></div>
+</div>
+</section>
+<section id="adding-the-server-to-claude-desktop">
+<h2>Adding the Server to Claude Desktop<a class="headerlink" href="#adding-the-server-to-claude-desktop" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Open Claude Desktop (On Windows, run as Administrator)</p></li>
+<li><p>Click on the “Files” tab in the top left</p></li>
+<li><p>Click on the “Settings” menu item</p></li>
+<li><p>Click on the “Developer” option</p></li>
+<li><p>Click on the “Edit Config” button to open the JSON configuration file</p></li>
+<li><p>Copy and paste the following configuration:</p></li>
+</ol>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;mcpServers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;weather&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;npx&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;-y&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;@h1deya/mcp-server-weather&quot;</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You might need to restart Claude Desktop to see the hammer icon in the chat interface, indicating that your MCP server is detected.
+You can verify the server status in the “Files/Settings/Developer” menu - “active” means the server is running and available.</p>
+</div>
+</section>
+<section id="testing-the-weather-server">
+<h2>Testing the Weather Server<a class="headerlink" href="#testing-the-weather-server" title="Link to this heading"></a></h2>
+<p>You can now use the weather server in your chat. Try asking:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>What<span class="w"> </span>is<span class="w"> </span>the<span class="w"> </span>weather<span class="w"> </span><span class="k">in</span><span class="w"> </span>Boston?
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This example uses a public government API that is currently functional in the US only.</p>
+</div>
+</section>
+</section>
+<section id="hackathon-docker-sqlite-database-server">
+<h1>Hackathon: Docker SQLite Database Server<a class="headerlink" href="#hackathon-docker-sqlite-database-server" title="Link to this heading"></a></h1>
+<p>In this part, we will set up a SQLite database server using Docker.</p>
+<section id="prerequisites-part-2">
+<h2>Prerequisites Part 2<a class="headerlink" href="#prerequisites-part-2" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.docker.com/engine/install/">Docker</a> - Install and verify it’s running as per the documentation</p></li>
+</ul>
+<p>We will be using the SQLite server from the official MCP servers repository:
+<a class="reference external" href="https://github.com/modelcontextprotocol/servers/tree/main/src/sqlite">MCP SQLite Server</a></p>
+<p>Clone the repository and navigate to the SQLite folder:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/modelcontextprotocol/servers.git
+<span class="nb">cd</span><span class="w"> </span>servers/src/sqlite
+</pre></div>
+</div>
+<p>Build the Docker image:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>mcp/sqlite<span class="w"> </span>.
+</pre></div>
+</div>
+</section>
+<section id="adding-the-sqlite-server-to-claude-desktop">
+<h2>Adding the SQLite Server to Claude Desktop<a class="headerlink" href="#adding-the-sqlite-server-to-claude-desktop" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Open Claude Desktop (On Windows, run as Administrator)</p></li>
+<li><p>Click on the “Files” tab in the top left</p></li>
+<li><p>Click on the “Settings” menu item</p></li>
+<li><p>Click on the “Developer” option</p></li>
+<li><p>Click on the “Edit Config” button to open the JSON configuration file</p></li>
+<li><p>Update the configuration file with the following content for Windows:</p></li>
+</ol>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;mcpServers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;weather&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;npx&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;-y&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;@h1deya/mcp-server-weather&quot;</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;sqlite&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;docker&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;run&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;--rm&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;-i&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;-v&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;mcp-test:/mcp&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;mcp/sqlite&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;--db-path&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;/mcp/test.db&quot;</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="using-the-sqlite-server">
+<h2>Using the SQLite Server<a class="headerlink" href="#using-the-sqlite-server" title="Link to this heading"></a></h2>
+<p>You can now use the SQLite server in your chat. Try the following prompts:</p>
+<p>Basic Example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">1</span><span class="o">)</span><span class="w"> </span>Create<span class="w"> </span>bakery<span class="w"> </span>DB<span class="w"> </span>tables:
+-<span class="w"> </span>ingredients<span class="w"> </span><span class="o">(</span>id,<span class="w"> </span>name,<span class="w"> </span>unit,<span class="w"> </span>quantity,<span class="w"> </span>cost,<span class="w"> </span>supplier,<span class="w"> </span>min_order_quantity<span class="o">)</span>
+
+<span class="m">2</span><span class="o">)</span><span class="w"> </span>Populate<span class="w"> </span>with:
+-<span class="w"> </span><span class="m">10</span><span class="w"> </span>ingredients<span class="w"> </span>with<span class="w"> </span>MOQs
+
+<span class="m">3</span><span class="o">)</span><span class="w"> </span>Add<span class="w"> </span>queries<span class="w"> </span><span class="k">for</span>:
+-<span class="w"> </span>Low<span class="w"> </span>stock<span class="w"> </span>alerts
+</pre></div>
+</div>
+<p>Create a dashboard visualization:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Let<span class="err">&#39;</span>s<span class="w"> </span>create<span class="w"> </span>a<span class="w"> </span>simple<span class="w"> </span>dashboard<span class="w"> </span>to<span class="w"> </span>visualize<span class="w"> </span>the<span class="w"> </span>low<span class="w"> </span>stock<span class="w"> </span>alerts
+</pre></div>
+</div>
+<p>Advanced Example (More Comprehensive):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">1</span><span class="o">)</span><span class="w"> </span>Create<span class="w"> </span>bakery<span class="w"> </span>DB<span class="w"> </span>tables:
+-<span class="w"> </span>ingredients<span class="w"> </span><span class="o">(</span>id,<span class="w"> </span>name,<span class="w"> </span>unit,<span class="w"> </span>quantity,<span class="w"> </span>cost,<span class="w"> </span>supplier,<span class="w"> </span>min_order_quantity<span class="o">)</span>
+-<span class="w"> </span>products<span class="w"> </span><span class="o">(</span>id,<span class="w"> </span>name,<span class="w"> </span>price,<span class="w"> </span>category,<span class="w"> </span>available<span class="o">)</span>
+-<span class="w"> </span>recipes<span class="w"> </span><span class="o">(</span>product_id,<span class="w"> </span>ingredient_id,<span class="w"> </span>quantity<span class="o">)</span>
+-<span class="w"> </span>suppliers<span class="w"> </span><span class="o">(</span>id,<span class="w"> </span>name,<span class="w"> </span>contact<span class="o">)</span>
+-<span class="w"> </span>inventory_logs<span class="w"> </span><span class="o">(</span>date,<span class="w"> </span>ingredient_id,<span class="w"> </span>quantity,<span class="w"> </span><span class="nb">type</span><span class="o">)</span>
+
+<span class="m">2</span><span class="o">)</span><span class="w"> </span>Populate<span class="w"> </span>with:
+-<span class="w"> </span><span class="m">10</span><span class="w"> </span>ingredients<span class="w"> </span>with<span class="w"> </span>MOQs
+-<span class="w"> </span><span class="m">8</span><span class="w"> </span>bakery<span class="w"> </span>products
+-<span class="w"> </span>Complete<span class="w"> </span>recipes
+-<span class="w"> </span><span class="m">3</span><span class="w"> </span>suppliers
+-<span class="w"> </span>Recent<span class="w"> </span>inventory<span class="w"> </span>activity
+
+<span class="m">3</span><span class="o">)</span><span class="w"> </span>Add<span class="w"> </span>queries<span class="w"> </span><span class="k">for</span>:
+-<span class="w"> </span>Low<span class="w"> </span>stock<span class="w"> </span>alerts
+-<span class="w"> </span>Product<span class="w"> </span>cost<span class="w"> </span>analysis
+-<span class="w"> </span>Production<span class="w"> </span>metrics
+</pre></div>
+</div>
+<p>Create a comprehensive dashboard:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Let<span class="err">&#39;</span>s<span class="w"> </span>create<span class="w"> </span>a<span class="w"> </span>detailed<span class="w"> </span>dashboard<span class="w"> </span>to<span class="w"> </span>visualize<span class="w"> </span>the<span class="w"> </span>low<span class="w"> </span>stock<span class="w"> </span>alerts<span class="w"> </span>and<span class="w"> </span>other<span class="w"> </span>insights
+</pre></div>
+</div>
+<p>For Learning to build your own MCP server in Python, you check out the getting started page of this documentation: <a href="#id1"><span class="problematic" id="id2">`Getting Started with building MCP server Page&lt;https://aidecentralized.github.io/MCP_Hackathon_docs/getting-started.html&gt;`_</span></a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="getting-started.html" class="btn btn-neutral float-left" title="Getting Started with MCP Python SDK" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="server-guide.html" class="btn btn-neutral float-right" title="Building MCP Servers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Model Context Protocol.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

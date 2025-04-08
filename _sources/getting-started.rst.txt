@@ -1,0 +1,136 @@
+Getting Started with MCP Python SDK
+===============================
+
+This guide will help you get started with the MCP Python SDK, which allows you to build MCP servers and clients in Python.
+
+Installation
+-----------
+
+There are two main ways to install the MCP Python SDK:
+
+Adding MCP to your Python project
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We recommend using `uv <https://docs.astral.sh/uv/>`_ to manage your Python projects.
+
+If you haven't created a uv-managed project yet, create one:
+
+.. code-block:: bash
+
+   uv init mcp-server-demo
+   cd mcp-server-demo
+
+Then add MCP to your project dependencies:
+
+.. code-block:: bash
+
+   uv add "mcp[cli]"
+
+Alternatively, for projects using pip for dependencies:
+
+.. code-block:: bash
+
+   pip install "mcp[cli]"
+
+Running the standalone MCP development tools
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To run the mcp command with uv:
+
+.. code-block:: bash
+
+   uv run mcp
+
+Quickstart
+---------
+
+Let's create a simple MCP server that exposes a calculator tool and some data:
+
+.. code-block:: python
+
+   # server.py
+   from mcp.server.fastmcp import FastMCP
+
+   # Create an MCP server
+   mcp = FastMCP("Demo")
+
+
+   # Add an addition tool
+   @mcp.tool()
+   def add(a: int, b: int) -> int:
+       """Add two numbers"""
+       return a + b
+
+
+   # Add a dynamic greeting resource
+   @mcp.resource("greeting://{name}")
+   def get_greeting(name: str) -> str:
+       """Get a personalized greeting"""
+       return f"Hello, {name}!"
+
+Running Your Server
+-----------------
+
+There are several ways to run your MCP server:
+
+Development Mode
+^^^^^^^^^^^^^^^
+
+The fastest way to test and debug your server is with the MCP Inspector:
+
+.. code-block:: bash
+
+   mcp dev server.py
+
+   # Add dependencies
+   mcp dev server.py --with pandas --with numpy
+
+   # Mount local code
+   mcp dev server.py --with-editable .
+
+Claude Desktop Integration
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can install your server in Claude Desktop:
+
+.. code-block:: bash
+
+   mcp install server.py
+
+   # Custom name
+   mcp install server.py --name "My Analytics Server"
+
+   # Environment variables
+   mcp install server.py -v API_KEY=abc123 -v DB_URL=postgres://...
+   mcp install server.py -f .env
+
+Direct Execution
+^^^^^^^^^^^^^^
+
+For advanced scenarios like custom deployments:
+
+.. code-block:: python
+
+   from mcp.server.fastmcp import FastMCP
+
+   mcp = FastMCP("My App")
+
+   if __name__ == "__main__":
+       mcp.run()
+
+Run it with:
+
+.. code-block:: bash
+
+   python server.py
+   # or
+   mcp run server.py
+
+Next Steps
+---------
+
+Now that you have a basic server running, continue to these sections:
+
+* :doc:`server-guide` - Learn more about building MCP servers
+* :doc:`client-guide` - Learn how to build clients that connect to MCP servers
+* :doc:`examples` - Explore more complex examples 
